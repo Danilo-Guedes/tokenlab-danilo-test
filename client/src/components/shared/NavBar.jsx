@@ -7,7 +7,7 @@ function NavBar() {
   return (
     <nav className="flex flex-row items-center justify-between p-2 md:p-10 bg-white border-b-2 border-border shadow-lg">
       <div className="flex-shrink-0">
-        <Link to={ROUTES.home}>
+        <Link to={ROUTES.events}>
           <img src="/logos/logo-tokenlab.jpeg" className="w-16 h-16" alt="logo" />
         </Link>
       </div>
