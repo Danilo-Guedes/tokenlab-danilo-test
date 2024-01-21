@@ -39,12 +39,13 @@ function LoginForm() {
 
       localStorage.setItem("user-token", data.token);
       localStorage.setItem("user-data", JSON.stringify(data.user));
+      const firstName = data.user.name.split(" ")[0];
       toast({
         title: "Usuário Logado",
-        description: `Bem vindo ao Teste QuikDev, ${data.user.name}`,
+        description: `Bem vindo ao teste da TokenLab, ${firstName}`,
       });
 
-      navigate(ROUTES.posts);
+      navigate(ROUTES.events);
     },
     onError: (error) => {
       // On error, you can do anything with the error object

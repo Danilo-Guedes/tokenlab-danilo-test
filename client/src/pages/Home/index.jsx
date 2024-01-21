@@ -11,9 +11,9 @@ function Home() {
   useEffect(() => {
     const hasUserData = checkAuth();
     if (hasUserData) {
-      navigate(ROUTES.posts);
+      navigate(ROUTES.events);
     }
-  }, []);
+  }, [navigate]);
 
   return (
     <div className="h-full p-2 md:p-5 m-2 flex items-center justify-center ">
@@ -44,7 +44,10 @@ function Home() {
               src="/logos/logo-tokenlab.jpeg"
               className="w-full self-center md:w-96"
             />
-            <img src="/images/foto-danilo.jpg" className="w-full xl:w-1/2  2xl:w-8/12" />
+            <img
+              src="/images/foto-danilo.jpg"
+              className="w-full xl:w-1/2  2xl:w-8/12"
+            />
           </div>
           <div className="w-full   lg:w-10/12 xl:w-1/2 flex flex-col items-center justify-center p-2  xl:p-10 mt-10 md:mt-0">
             <LoginForm />

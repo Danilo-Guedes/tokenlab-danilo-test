@@ -13,6 +13,16 @@ async function handleCreateUser(req, res) {
 
   try {
 
+    const existingUser = await User.findOne({email: req.body.email})
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({
+          error: true,
+          message: "The Email provided already has a user associated",
+        });
+    }
+
    const newUser = {
       name,
       email,

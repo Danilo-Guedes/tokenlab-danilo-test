@@ -37,11 +37,11 @@ function SignUpForm() {
     onError: (error) => {
       console.log("Error creating user", error);
 
-      if (error?.data?.message?.includes("already has a user associated")) {
+      if (error?.response?.data?.message?.includes("already has a user associated")) {
         toast({
           title: "Opss...",
           description:
-            "O E-mail informado já contém um usuário ssociado, tente outro e-mail",
+            "O E-mail informado já contém um usuário ssociado, tente outro e-mail ou clique em esqueci minha senha",
           variant: "destructive",
         });
       } else {
