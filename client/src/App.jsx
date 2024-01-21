@@ -7,6 +7,7 @@ import { ROUTES } from "./utils/routes";
 import { Toaster } from "./components/ui/toaster";
 import { checkAuth } from "./utils/auth";
 import Events from "./pages/Events";
+import NewEvent from "./pages/NewEvent";
 
 function App() {
   const router = createBrowserRouter([
@@ -21,6 +22,11 @@ function App() {
     {
       path: ROUTES.events,
       element: <Events />,
+      loader: () => checkAuth(),
+    },
+    {
+      path: ROUTES.newEvent,
+      element: <NewEvent />,
       loader: () => checkAuth(),
     },
   

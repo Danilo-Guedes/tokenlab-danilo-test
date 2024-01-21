@@ -17,7 +17,7 @@ function EventCard({ event }) {
 
   return (
     <div className="flex flex-col md:flex-row border items-stretch rounded-2xl w-full md:h-36 p-3 lg:p-5 shadow-md gap-5 border-primary shadow-primary">
-      <div className="flex flex-col items-start justify-start md:w-32 overflow-hidden">
+      <div className="flex flex-col items-center md:items-start justify-start md:w-32 overflow-hidden">
         <span
           title={event.name}
           className="text-lg text-ellipsis line-clamp-3 text-secondary font-bold text-start"
@@ -25,8 +25,8 @@ function EventCard({ event }) {
           {event.name}
         </span>
       </div>
-      <div className="flex flex-col items-start justify-start text-sm gap-2">
-        <Calendar size={24} />{" "}
+      <div className="flex flex-col items-center md:items-start md:justify-start text-sm gap-2">
+        <Calendar size={24} className="text-primary" />
         <span>
           De: {initialDate.toLocaleDateString("pt-BR", { dateStyle: "short" })}{" "}
           as {initialDateHour}
@@ -36,7 +36,7 @@ function EventCard({ event }) {
           as {finalDateHour}
         </span>
       </div>
-      <div className="flex flex-1 flex-col items-start bg-primary/30 rounded-lg p-1 md:p-4 ">
+      <div className="flex flex-1 flex-col items-start bg-primary/20 rounded-lg p-1 md:p-4 ">
         <span
           title={event.description}
           className="text-ellipsis line-clamp-3 text-secondary font-bold text-start"
