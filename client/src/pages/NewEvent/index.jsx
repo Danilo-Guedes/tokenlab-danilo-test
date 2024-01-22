@@ -1,7 +1,8 @@
-import { useState } from "react";
+import {  useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ptBR from "date-fns/locale/pt-BR";
+import { isSameDay,  setMinutes } from "date-fns";
 import { Calendar } from "lucide-react"; // Import the Calendar icon from lucide-react
 
 import PageTemplate from "../../components/shared/PageTemplate";
@@ -11,6 +12,22 @@ import { Textarea } from "../../components/ui/textarea";
 function NewEvent() {
   const [startDateAndHour, setStartDateAndHour] = useState("");
   const [endDateAndHour, setEndDateAndHour] = useState("");
+
+  const [initialMinTime, setInitialMinTime] = useState(
+    setMinutes(new Date(), 0),
+    0
+  );
+  const [finalMinTime, setFinalMinTime] = useState(
+    setMinutes(new Date(), 0),
+    0
+  );
+
+  function resetInitialMinTime(date) {
+    setInitialMinTime(setMinutes(new Date(date), 0), 0);
+  }
+  function resetFinalMinTime(date) {
+    setFinalMinTime(setMinutes(new Date(date), 0), 0);
+  }
 
   return (
     <PageTemplate>
@@ -53,23 +70,32 @@ function NewEvent() {
               >
                 Data e hora de início
               </label>
-              <div className="flex items-center w-full">
-                <Calendar size={30} className="text-primary" />
-                <DatePicker
-                  id="event-initial-date"
-                  className="w-full border border-primary rounded-lg p-2"
-                  placeholder="Preencha..."
-                  showTimeSelect
-                  locale={ptBR}
-                  selected={startDateAndHour}
-                  todayButton="Hoje"
-                  dateFormat="Pp"
-                  onChange={(date) => {
-                    // console.log("date: ", date);
-                    setStartDateAndHour(date);
-                  }}
-                />
-              </div>
+
+              <DatePicker
+                id="event-initial-date"
+                className="w-full border border-primary rounded-lg p-2"
+                placeholderText="Selecione..."
+                showTimeSelect
+                locale={ptBR}
+                selected={startDateAndHour}
+                todayButton="Hoje"
+                dateFormat="Pp"
+                onChange={(date) => {
+                  setStartDateAndHour(date);
+                  if (isSameDay(new Date(), date)) {
+                    setInitialMinTime(new Date());
+                  } else {
+                    resetInitialMinTime(date);
+                  }
+                }}
+                showIcon
+                icon={<Calendar className="text-primary" />}
+                isClearable
+                toggleCalendarOnIconClick
+                minDate={new Date(Date.now())}
+                minTime={initialMinTime}
+                maxTime={new Date().setHours(23, 59, 59)}
+              />
             </div>
             <div className="flex flex-col items-start justify-center w-full gap-5">
               <label
@@ -78,23 +104,33 @@ function NewEvent() {
               >
                 Data e hora de término
               </label>
-              <div className="flex items-center w-full">
-                <Calendar size={30} className="text-primary" />
-                <DatePicker
-                  id="event-final-date"
-                  className="w-full border border-primary rounded-lg p-2"
-                  placeholder="Preencha..."
-                  showTimeSelect
-                  locale={ptBR}
-                  selected={endDateAndHour}
-                  todayButton="Hoje"
-                  dateFormat="Pp"
-                  onChange={(date) => {
-                    // console.log("date: ", date);
-                    setEndDateAndHour(date);
-                  }}
-                />
-              </div>
+
+              <DatePicker
+                id="event-final-date"
+                className="w-full border border-primary rounded-lg p-2"
+                placeholderText="Selecione..."
+                showTimeSelect
+                locale={ptBR}
+                selected={endDateAndHour}
+                todayButton="Hoje"
+                dateFormat="Pp"
+                onChange={(date) => {
+                  // console.log("date: ", date);
+                  setEndDateAndHour(date);
+                  if (isSameDay(startDateAndHour, date)) {
+                    setFinalMinTime(startDateAndHour);
+                  } else {
+                    resetFinalMinTime(date);
+                  }
+                }}
+                showIcon
+                icon={<Calendar className="text-primary" />}
+                isClearable
+                toggleCalendarOnIconClick
+                minDate={startDateAndHour}
+                minTime={finalMinTime}
+                maxTime={new Date().setHours(23, 59, 59)}
+              />
             </div>
           </div>
         </form>
