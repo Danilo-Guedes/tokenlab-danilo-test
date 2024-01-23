@@ -2,13 +2,13 @@ import { Eye, Edit, Trash, Calendar } from "lucide-react";
 import { Button } from "../ui/button";
 
 function EventCard({ event }) {
-  const initialDate = new Date(event.initialDateAndHour);
+  const initialDate = new Date(event.startDateAndHour);
   const initialDateHour = initialDate.toLocaleTimeString("pt-BR", {
     minute: "2-digit",
     hour: "numeric",
     hour12: true,
   });
-  const finalDate = new Date(event.finalDateAndHour);
+  const finalDate = new Date(event.endDateAndHour);
   const finalDateHour = finalDate.toLocaleTimeString("pt-BR", {
     minute: "2-digit",
     hour: "numeric",
@@ -17,10 +17,10 @@ function EventCard({ event }) {
 
   return (
     <div className="flex flex-col md:flex-row border items-stretch rounded-2xl w-full md:h-36 p-3 lg:p-5 shadow-md gap-5 border-primary shadow-primary">
-      <div className="flex flex-col items-center md:items-start justify-start md:w-32 overflow-hidden">
+      <div className="flex flex-col items-center md:items-start justify-start md:w-36 overflow-hidden ">
         <span
           title={event.name}
-          className="text-lg text-ellipsis line-clamp-3 text-secondary font-bold text-start"
+          className="text-lg text-ellipsis line-clamp-3 text-secondary font-bold text-start break-all  "
         >
           {event.name}
         </span>

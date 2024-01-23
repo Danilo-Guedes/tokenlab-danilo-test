@@ -1,4 +1,21 @@
 const Event = require("../models/event");
+
+async function handleEventList(req, res) {
+  // Handle the logic for getting a list of events
+  try {
+    const events = await Event.find({});
+
+    if (!events) {
+      return res
+        .status(200)
+        .json({ message: "events list is empty", data: events });
+    }
+
+    res.status(200).json({ message: "Events found", data: events });
+  } catch (error) {
+    console.log(error);
+  }
+}
 async function createEventHandler(req, res) {
   // Handle the logic for creating an event
 
@@ -13,14 +30,14 @@ async function createEventHandler(req, res) {
       guests,
     } = req.body;
 
-    console.log({
-      name,
-      description,
-      startDateAndHour,
-      endDateAndHour,
-      ownerId,
-      guests,
-    });
+    // console.log({
+    //   name,
+    //   description,
+    //   startDateAndHour,
+    //   endDateAndHour,
+    //   ownerId,
+    //   guests,
+    // });
 
     const newEvent = {
       name,
@@ -49,4 +66,4 @@ async function createEventHandler(req, res) {
   }
 }
 
-module.exports = { createEventHandler };
+module.exports = { createEventHandler , handleEventList};

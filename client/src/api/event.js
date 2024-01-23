@@ -1,6 +1,6 @@
 import apiClient from ".";
 
-export async function fetchEventsApi() {
+export async function getEventsApi() {
   try {
     const resp = await apiClient.get("/events");
 

@@ -13,9 +13,12 @@ import { Input } from "@/src/components/ui/input";
 import { Textarea } from "@/src/components/ui/textarea";
 import AddPersonToEventSelect from "@/src/components/shared/AddPersonToEventSelect";
 import { Button } from "@/src/components/ui/button";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createEventApi } from "@/src/api/event";
 import useUserData from "@/src/hooks/useUserData";
+import { useToast } from "@/src/components/ui/use-toast";
+import { useNavigate } from "react-router";
+import { ROUTES } from "@/src/utils/routes";
 
 const options = [
   { value: "chocolate", label: "Chocolate" },
@@ -38,6 +41,9 @@ const validationSchema = Yup.object().shape({
 function NewEventForm() {
   const [startDateAndHour, setStartDateAndHour] = useState("");
   const [endDateAndHour, setEndDateAndHour] = useState("");
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient()
 
   const [initialMinTime, setInitialMinTime] = useState(
     setMinutes(new Date(), 0),
@@ -60,9 +66,15 @@ function NewEventForm() {
     onError: (error) => {
       console.log(error);
     },
-    onSuccess: (data) => {
+    onSuccess: ({data}) => {
       console.log({ data });
-      alert("Evento criado com sucesso");
+      toast({
+        title: "Evento criado com sucesso",
+        description: `"${data.name}" criado com sucesso`,
+      });
+      queryClient.invalidateQueries({queryKey: ["events-list"]})
+      navigate(ROUTES.events);
+      
     },
   });
 
