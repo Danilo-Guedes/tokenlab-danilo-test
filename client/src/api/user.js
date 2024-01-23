@@ -2,7 +2,7 @@ import apiClient from ".";
 
 export async function createUser(user) {
   try {
-    const resp = await apiClient.post("/user/create", user);
+    const resp = await apiClient.post("/users/create", user);
 
     console.log({ resp });
 
@@ -15,7 +15,7 @@ export async function createUser(user) {
 export async function getUserById() {
   try {
 
-    const resp = await apiClient.get("/user/me", );
+    const resp = await apiClient.get("/users/me", );
 
     console.log({ resp });
 

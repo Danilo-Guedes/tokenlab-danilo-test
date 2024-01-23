@@ -13,6 +13,9 @@ import { Input } from "@/src/components/ui/input";
 import { Textarea } from "@/src/components/ui/textarea";
 import AddPersonToEventSelect from "@/src/components/shared/AddPersonToEventSelect";
 import { Button } from "@/src/components/ui/button";
+import { useMutation } from "@tanstack/react-query";
+import { createEventApi } from "@/src/api/event";
+import useUserData from "@/src/hooks/useUserData";
 
 const options = [
   { value: "chocolate", label: "Chocolate" },
@@ -21,8 +24,8 @@ const options = [
 ];
 
 const validationSchema = Yup.object().shape({
-  eventName: Yup.string().required("Nome do evento é obrigatório"),
-  eventDescription: Yup.string().required("Descrição do evento é obrigatória"),
+  name: Yup.string().required("Nome do evento é obrigatório"),
+  description: Yup.string().required("Descrição do evento é obrigatória"),
   startDateAndHour: Yup.date().required("Data de início é obrigatória"),
   endDateAndHour: Yup.date()
     .required("Data de término é obrigatória")
@@ -51,18 +54,34 @@ function NewEventForm() {
   function resetFinalMinTime(date) {
     setFinalMinTime(setHours(setMinutes(new Date(date), 0), 0));
   }
+  const { user } = useUserData();
+  const { mutate } = useMutation({
+    mutationFn: createEventApi,
+    onError: (error) => {
+      console.log(error);
+    },
+    onSuccess: (data) => {
+      console.log({ data });
+      alert("Evento criado com sucesso");
+    },
+  });
 
   const formik = useFormik({
     initialValues: {
-      eventName: "",
-      eventDescription: "",
+      name: "",
+      description: "",
       startDateAndHour: "",
       endDateAndHour: "",
     },
     validationSchema,
     onSubmit: (values) => {
-      // Handle form submission
-      console.log({ values });
+      console.log({ valuesAntes: values });
+
+      values.ownerId = user?.id;
+      // values.startDateAndHour = values.startDateAndHour.toString();
+      // values.endDateAndHour = values.endDateAndHour.toString();
+      console.log({ valuesDepois: values });
+      mutate(values);
     },
   });
 
@@ -71,6 +90,10 @@ function NewEventForm() {
 
     setFinalMinTime(startDateAndHour);
   }, [startDateAndHour]);
+
+  useEffect(() => {
+    console.log({ usernoForm: user });
+  }, [user]);
 
   return (
     <form
@@ -88,12 +111,10 @@ function NewEventForm() {
           id="event-name"
           className="w-full border border-primary rounded-lg p-2"
           placeholder="Preencha..."
-          {...formik.getFieldProps("eventName")}
+          {...formik.getFieldProps("name")}
         />
-        {formik.touched.eventName && formik.errors.eventName ? (
-          <span className="text-sm text-red-500">
-            {formik.errors.eventName}
-          </span>
+        {formik.touched.name && formik.errors.name ? (
+          <span className="text-sm text-red-500">{formik.errors.name}</span>
         ) : null}
       </div>
       <div className="flex flex-col items-start justify-center w-full gap-1">
@@ -107,11 +128,11 @@ function NewEventForm() {
           id="event-description"
           className="w-full border border-primary rounded-lg p-2"
           placeholder="Preencha..."
-          {...formik.getFieldProps("eventDescription")}
+          {...formik.getFieldProps("description")}
         />
-        {formik.touched.eventDescription && formik.errors.eventDescription ? (
+        {formik.touched.description && formik.errors.description ? (
           <span className="text-sm text-red-500">
-            {formik.errors.eventDescription}
+            {formik.errors.description}
           </span>
         ) : null}
       </div>
@@ -151,6 +172,7 @@ function NewEventForm() {
             minDate={new Date(Date.now())}
             minTime={initialMinTime}
             maxTime={new Date().setHours(23, 59, 59)}
+            autoComplete="off"
           />
           {formik.touched.startDateAndHour && formik.errors.startDateAndHour ? (
             <span className="text-sm text-red-500">
@@ -192,6 +214,7 @@ function NewEventForm() {
             minDate={startDateAndHour || new Date(Date.now())}
             minTime={addMinutes(finalMinTime, 30) || new Date(Date.now())}
             maxTime={new Date().setHours(23, 59, 59)}
+            autoComplete="off"
           />
           {formik.touched.endDateAndHour && formik.errors.endDateAndHour ? (
             <span className="text-sm text-red-500">
@@ -204,10 +227,10 @@ function NewEventForm() {
       <Button type="submit" className="w-full mt-5">
         Adicionar Evento
       </Button>
-      <pre>
+      {/* <pre>
         {JSON.stringify(formik.values, null, 2)}
         {JSON.stringify(formik.errors, null, 2)}
-      </pre>
+      </pre> */}
     </form>
   );
 }

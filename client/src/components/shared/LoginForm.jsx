@@ -10,6 +10,7 @@ import Spinner from "./Spinner";
 import { cn } from "../../utils/style";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import useUserData from "@/src/hooks/useUserData";
 
 function LoginForm() {
   const formik = useFormik({
@@ -26,6 +27,8 @@ function LoginForm() {
     },
   });
 
+
+  const {setUserFn} = useUserData()
   const navigate = useNavigate();
 
   const { toast } = useToast();
@@ -39,6 +42,8 @@ function LoginForm() {
 
       localStorage.setItem("user-token", data.token);
       localStorage.setItem("user-data", JSON.stringify(data.user));
+
+      setUserFn(data.user)
       const firstName = data.user.name.split(" ")[0];
       toast({
         title: "Usuário Logado",

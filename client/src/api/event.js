@@ -1,8 +1,8 @@
 import apiClient from ".";
 
-export async function fetchPosts() {
+export async function fetchEventsApi() {
   try {
-    const resp = await apiClient.get("/posts/list");
+    const resp = await apiClient.get("/events");
 
     console.log({ resp });
 
@@ -12,10 +12,12 @@ export async function fetchPosts() {
     throw error;
   }
 }
-export async function createPost(data) {
+export async function createEventApi(data) {
     console.log("data na api", data);
+
+    console.log("typeof startDate", typeof data.startDateAndHour);
   try {
-    const resp = await apiClient.post("/posts/create", data);
+    const resp = await apiClient.post("/events/create-event", data);
 
     console.log({ resp });
 

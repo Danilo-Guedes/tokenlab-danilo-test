@@ -8,6 +8,7 @@ import { Toaster } from "./components/ui/toaster";
 import { checkAuth } from "./utils/auth";
 import Events from "./pages/Events";
 import NewEvent from "./pages/NewEvent";
+import { GlobalProvider } from "./context/index";
 
 function App() {
   const router = createBrowserRouter([
@@ -29,16 +30,17 @@ function App() {
       element: <NewEvent />,
       loader: () => checkAuth(),
     },
-  
   ]);
 
   const queryClient = new QueryClient();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-      <Toaster />
-    </QueryClientProvider>
+    <GlobalProvider>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+        <Toaster />
+      </QueryClientProvider>
+    </GlobalProvider>
   );
 }
 

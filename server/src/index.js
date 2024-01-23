@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 
 const userRouter = require("./routes/user");
 const authRouter = require("./routes/auth");
+const eventRouter = require("./routes/event");
 
 const app = express();
 
@@ -14,8 +15,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //ROUTES
-app.use("/api/user", userRouter);
+app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/events", eventRouter);
 
 app.listen(3000, async () => {
   await mongoose.connect("mongodb://localhost:27017/tokenlab");

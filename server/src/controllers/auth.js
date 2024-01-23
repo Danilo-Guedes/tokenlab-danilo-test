@@ -29,7 +29,7 @@ async function handleUserLogin(req, res) {
     // }
 
     const userData = {
-      id: row.id,
+      id: row._id, 
       name: row.name,
       email: row.email,
     };
