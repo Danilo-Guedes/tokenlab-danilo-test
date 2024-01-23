@@ -22,7 +22,7 @@ function DeleteEventModal({ triggerButton, eventData }) {
 
   const queryClient = useQueryClient();
 
-  const { mutate, isLoading } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: deleteEventApi,
     onError: (error) => {
       console.log(error);
@@ -59,9 +59,9 @@ function DeleteEventModal({ triggerButton, eventData }) {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isLoading}>Cancelar</AlertDialogCancel>
+          <AlertDialogCancel disabled={isPending}>Cancelar</AlertDialogCancel>
           <Button
-            isLoading={isLoading}
+            isLoading={isPending}
             onClick={handleDeleteEvent}
             className="w-full md:w-32"
           >
