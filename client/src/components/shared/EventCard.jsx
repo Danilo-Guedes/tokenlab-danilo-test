@@ -1,5 +1,6 @@
 import { Eye, Edit, Trash, Calendar } from "lucide-react";
 import { Button } from "../ui/button";
+import DeleteEventModal from "./DeleteEventModal";
 
 function EventCard({ event }) {
   const initialDate = new Date(event.startDateAndHour);
@@ -14,6 +15,7 @@ function EventCard({ event }) {
     hour: "numeric",
     hour12: true,
   });
+
 
   return (
     <div className="flex flex-col md:flex-row border items-stretch rounded-2xl w-full md:h-36 p-3 lg:p-5 shadow-md gap-5 border-primary shadow-primary">
@@ -51,9 +53,14 @@ function EventCard({ event }) {
         <Button className="mr-2" variant="ghost">
           <Edit />
         </Button>
-        <Button variant="destructive">
-          <Trash />
-        </Button>
+        <DeleteEventModal
+          triggerButton={
+            <Button variant="destructive">
+              <Trash />
+            </Button>
+          }
+          eventData={event}
+        />
       </div>
     </div>
   );

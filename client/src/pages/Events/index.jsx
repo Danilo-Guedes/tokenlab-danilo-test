@@ -72,7 +72,7 @@ function Events() {
                 <img src="/src/svg/sad-face.svg" alt="empty" width={200} />
               </div>
             ) : (
-              events.map((event) => <EventCard key={event.id} event={event} />)
+              events.map((event) => <EventCard key={event._id} event={event} />)
             )}
           </div>
         </div>

@@ -1,6 +1,6 @@
 const express = require("express");
 const { check } = require("express-validator");
-const { createEventHandler, handleEventList } = require("../controllers/event");
+const { createEventHandler, handleEventList, handleEventDelete } = require("../controllers/event");
 const validationMiddleware = require("../middlewares/validation");
 const authMiddleware = require("../middlewares/auth");
 
@@ -29,5 +29,7 @@ router.post(
     createEventHandler(req, res);
   }
 );
+
+router.delete("/:id", authMiddleware, handleEventDelete)
 
 module.exports = router;

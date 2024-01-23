@@ -27,3 +27,16 @@ export async function createEventApi(data) {
     throw error;
   }
 }
+
+export async function deleteEventApi(id) {
+  try {
+    const resp = await apiClient.delete(`/events/${id}`);
+
+    console.log({ resp });
+
+    return resp.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}

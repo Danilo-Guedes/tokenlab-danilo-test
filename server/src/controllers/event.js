@@ -16,6 +16,7 @@ async function handleEventList(req, res) {
     console.log(error);
   }
 }
+
 async function createEventHandler(req, res) {
   // Handle the logic for creating an event
 
@@ -29,15 +30,6 @@ async function createEventHandler(req, res) {
       ownerId,
       guests,
     } = req.body;
-
-    // console.log({
-    //   name,
-    //   description,
-    //   startDateAndHour,
-    //   endDateAndHour,
-    //   ownerId,
-    //   guests,
-    // });
 
     const newEvent = {
       name,
@@ -66,4 +58,22 @@ async function createEventHandler(req, res) {
   }
 }
 
-module.exports = { createEventHandler , handleEventList};
+async function handleEventDelete(req, res) {
+  try {
+    const eventId = req.params.id;
+    const deletedEvent = await Event.findByIdAndDelete(eventId);
+
+    if (!deletedEvent) {
+      return res
+        .status(404)
+        .json({ error: true, message: "Event not found" });
+    }
+
+    res.status(200).json({ message: "Event deleted successfully" });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+module.exports = { createEventHandler, handleEventList, handleEventDelete,  };
+
