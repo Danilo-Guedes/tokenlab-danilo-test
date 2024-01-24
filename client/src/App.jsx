@@ -9,6 +9,7 @@ import { checkAuth } from "./utils/auth";
 import Events from "./pages/Events";
 import NewEvent from "./pages/NewEvent";
 import { GlobalProvider } from "./context/index";
+import EventDetails from "./pages/EventDetails";
 
 function App() {
   const router = createBrowserRouter([
@@ -30,6 +31,11 @@ function App() {
       element: <NewEvent />,
       loader: () => checkAuth(),
     },
+    {
+      path: ROUTES.eventDetails(),
+      element: <EventDetails />,
+      loader: () => checkAuth(),
+    }
   ]);
 
   const queryClient = new QueryClient();

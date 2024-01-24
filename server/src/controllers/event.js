@@ -17,6 +17,21 @@ async function handleEventList(req, res) {
   }
 }
 
+async function handleGetEventById(req, res) {
+  try {
+    const eventId = req.params.id;
+    const event = await Event.findById(eventId);
+
+    if (!event) {
+      return res.status(404).json({ error: true, message: "Event not found" });
+    }
+
+    res.status(200).json({ message: "Event found", data: event });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 async function createEventHandler(req, res) {
   // Handle the logic for creating an event
 
@@ -64,9 +79,7 @@ async function handleEventDelete(req, res) {
     const deletedEvent = await Event.findByIdAndDelete(eventId);
 
     if (!deletedEvent) {
-      return res
-        .status(404)
-        .json({ error: true, message: "Event not found" });
+      return res.status(404).json({ error: true, message: "Event not found" });
     }
 
     res.status(200).json({ message: "Event deleted successfully" });
@@ -75,5 +88,45 @@ async function handleEventDelete(req, res) {
   }
 }
 
-module.exports = { createEventHandler, handleEventList, handleEventDelete,  };
+async function handleEditEvent(req, res) {
+  try {
+    const eventId = req.params.id;
+    const {
+      name,
+      description,
+      startDateAndHour,
+      endDateAndHour,
+      ownerId,
+      guests,
+    } = req.body;
 
+    const updatedEvent = {
+      name,
+      description,
+      startDateAndHour,
+      endDateAndHour,
+      ownerId,
+      guests,
+    };
+
+    const event = await Event.findByIdAndUpdate(eventId, updatedEvent, {
+      new: true,
+    });
+
+    if (!event) {
+      return res.status(404).json({ error: true, message: "Event not found" });
+    }
+
+    res.status(200).json({ message: "Event updated", data: event });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+module.exports = {
+  createEventHandler,
+  handleEventList,
+  handleEventDelete,
+  handleGetEventById,
+  handleEditEvent
+};

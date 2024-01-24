@@ -14,8 +14,7 @@ import { Textarea } from "@/src/components/ui/textarea";
 import AddPersonToEventSelect from "@/src/components/shared/AddPersonToEventSelect";
 import { Button } from "@/src/components/ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createEventApi } from "@/src/api/event";
-import useUserData from "@/src/hooks/useUserData";
+import { editEventApi } from "@/src/api/event";
 import { useToast } from "@/src/components/ui/use-toast";
 import { useNavigate } from "react-router";
 import { ROUTES } from "@/src/utils/routes";
@@ -38,12 +37,16 @@ const validationSchema = Yup.object().shape({
     ),
 });
 
-function NewEventForm() {
-  const [startDateAndHour, setStartDateAndHour] = useState("");
-  const [endDateAndHour, setEndDateAndHour] = useState("");
+function EditEventForm({ event }) {
+  const [startDateAndHour, setStartDateAndHour] = useState(
+    new Date(event?.startDateAndHour) || ""
+  );
+  const [endDateAndHour, setEndDateAndHour] = useState(
+    new Date(event.endDateAndHour) || ""
+  );
   const { toast } = useToast();
   const navigate = useNavigate();
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   const [initialMinTime, setInitialMinTime] = useState(
     setMinutes(new Date(), 0),
@@ -60,36 +63,32 @@ function NewEventForm() {
   function resetFinalMinTime(date) {
     setFinalMinTime(setHours(setMinutes(new Date(date), 0), 0));
   }
-  const { user } = useUserData();
-  const { mutate } = useMutation({
-    mutationFn: createEventApi,
+  const { mutate, isPending } = useMutation({
+    mutationFn: editEventApi,
     onError: (error) => {
       console.log(error);
     },
-    onSuccess: ({data}) => {
+    onSuccess: ({ data }) => {
+      console.log({ data });
       toast({
-        title: "Evento criado com sucesso",
-        description: `"${data.name}" criado com sucesso`,
+        title: "Sucesso",
+        description: `"${data.name}" editado com sucesso`,
       });
-      queryClient.invalidateQueries({queryKey: ["events-list"]})
+      queryClient.invalidateQueries({ queryKey: ["events-list"] });
       navigate(ROUTES.events);
-      
     },
   });
 
   const formik = useFormik({
     initialValues: {
-      name: "",
-      description: "",
-      startDateAndHour: "",
-      endDateAndHour: "",
+      name: event.name,
+      description: event.description,
+      startDateAndHour: event.startDateAndHour,
+      endDateAndHour: event.endDateAndHour,
     },
     validationSchema,
     onSubmit: (values) => {
-
-      values.ownerId = user?.id;
-
-      mutate(values);
+      mutate({ id: event._id, data: values });
     },
   });
 
@@ -227,9 +226,25 @@ function NewEventForm() {
         </div>
       </div>
       <AddPersonToEventSelect options={options} />
-      <Button type="submit" className="w-full mt-5">
-        Adicionar Evento
-      </Button>
+
+      {formik.dirty && (
+        <div className="flex flex-col items-center justify-center w-full gap-5 lg:flex-row">
+          <Button
+            variant="destructive"
+            className="w-full mt-5"
+            onClick={() => {
+              setStartDateAndHour(new Date(event.startDateAndHour));
+              setEndDateAndHour(new Date(event.endDateAndHour));
+              formik.resetForm();
+            }}
+          >
+            Cancelar
+          </Button>
+          <Button type="submit" className="w-full mt-5" isLoading={isPending}>
+            Editar Evento
+          </Button>
+        </div>
+      )}
       {/* <pre>
         {JSON.stringify(formik.values, null, 2)}
         {JSON.stringify(formik.errors, null, 2)}
@@ -238,4 +253,4 @@ function NewEventForm() {
   );
 }
 
-export default NewEventForm;
+export default EditEventForm;

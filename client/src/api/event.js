@@ -3,9 +3,16 @@ import apiClient from ".";
 export async function getEventsApi() {
   try {
     const resp = await apiClient.get("/events");
+    return resp.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
 
-    console.log({ resp });
-
+export async function getEventByIdApi(id) {
+  try {
+    const resp = await apiClient.get(`/events/${id}`);
     return resp.data;
   } catch (error) {
     console.error(error);
@@ -13,14 +20,20 @@ export async function getEventsApi() {
   }
 }
 export async function createEventApi(data) {
-    console.log("data na api", data);
 
-    console.log("typeof startDate", typeof data.startDateAndHour);
   try {
     const resp = await apiClient.post("/events/create-event", data);
+    return resp.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
 
-    console.log({ resp });
-
+export async function editEventApi({ id, data }) {
+  console.log("o que está chegando na api", data);
+  try {
+    const resp = await apiClient.put(`/events/${id}`, data);
     return resp.data;
   } catch (error) {
     console.error(error);
@@ -31,9 +44,6 @@ export async function createEventApi(data) {
 export async function deleteEventApi(id) {
   try {
     const resp = await apiClient.delete(`/events/${id}`);
-
-    console.log({ resp });
-
     return resp.data;
   } catch (error) {
     console.error(error);

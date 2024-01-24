@@ -33,8 +33,7 @@ function DeleteEventModal({ triggerButton, eventData }) {
       });
       setIsOpen(false);
     },
-    onSuccess: ({ data }) => {
-      console.log({ data });
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["events-list"] });
       toast({
         title: "Sucesso!",

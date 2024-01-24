@@ -9,7 +9,6 @@ const apiClient = axios.create({
 });
 
 apiClient.interceptors.request.use((config) => {
-  console.log("url", config.url);
   if (config.url === ROUTES.home) {
     return config; // Return early
   }
