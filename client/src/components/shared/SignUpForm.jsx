@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 
 import { ROUTES } from "../../utils/routes";
-import { createUser } from "../../api/user";
+import { createUserApi } from "../../api/user";
 
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -25,12 +25,12 @@ function SignUpForm() {
 
   const { toast } = useToast();
   const { mutate, isPending } = useMutation({
-    mutationFn: createUser,
+    mutationFn: createUserApi,
     onSuccess: () => {
 
       toast({
         title: "Sucesso!",
-        description: `Usuário criado com sucesso!!`,
+        description: `Usuário criado com sucesso! Um e-mail de validação foi enviado para o e-mail informado`,
       });
       navigate(ROUTES.home);
     },

@@ -31,7 +31,6 @@ export async function createEventApi(data) {
 }
 
 export async function editEventApi({ id, data }) {
-  console.log("o que está chegando na api", data);
   try {
     const resp = await apiClient.put(`/events/${id}`, data);
     return resp.data;

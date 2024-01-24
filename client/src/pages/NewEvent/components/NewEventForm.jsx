@@ -20,11 +20,7 @@ import { useToast } from "@/src/components/ui/use-toast";
 import { useNavigate } from "react-router";
 import { ROUTES } from "@/src/utils/routes";
 
-const options = [
-  { value: "chocolate", label: "Chocolate" },
-  { value: "strawberry", label: "Strawberry" },
-  { value: "vanilla", label: "Vanilla" },
-];
+
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("Nome do evento é obrigatório"),
@@ -36,9 +32,13 @@ const validationSchema = Yup.object().shape({
       Yup.ref("startDateAndHour"),
       "Data de término deve ser maior que a data de início"
     ),
+    guests: Yup.array().of(Yup.object({
+      value: Yup.string().required(),
+      label: Yup.string().required(),
+    })).optional().default([]),
 });
 
-function NewEventForm() {
+function NewEventForm({guests}) {
   const [startDateAndHour, setStartDateAndHour] = useState("");
   const [endDateAndHour, setEndDateAndHour] = useState("");
   const { toast } = useToast();
@@ -83,11 +83,16 @@ function NewEventForm() {
       description: "",
       startDateAndHour: "",
       endDateAndHour: "",
+      guests: []
     },
     validationSchema,
     onSubmit: (values) => {
 
       values.ownerId = user?.id;
+
+      values.guests = values.guests.map((guest) => guest.value);
+
+      console.log({values});
 
       mutate(values);
     },
@@ -226,14 +231,14 @@ function NewEventForm() {
           ) : null}
         </div>
       </div>
-      <AddPersonToEventSelect options={options} />
+      <AddPersonToEventSelect guests={guests} onChange={formik.setFieldValue} />
       <Button type="submit" className="w-full mt-5">
         Adicionar Evento
       </Button>
-      {/* <pre>
-        {JSON.stringify(formik.values, null, 2)}
-        {JSON.stringify(formik.errors, null, 2)}
-      </pre> */}
+      <pre>
+        {/* {JSON.stringify(formik.values, null, 2)}
+        {JSON.stringify(formik.errors, null, 2)} */}
+      </pre>
     </form>
   );
 }

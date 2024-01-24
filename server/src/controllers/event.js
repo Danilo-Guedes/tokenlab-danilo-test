@@ -1,9 +1,8 @@
 const Event = require("../models/event");
 
 async function handleEventList(req, res) {
-  // Handle the logic for getting a list of events
   try {
-    const events = await Event.find({});
+    const events = await Event.find({ownerId: req.body.user.id}).populate("guests");
 
     if (!events) {
       return res
@@ -20,7 +19,7 @@ async function handleEventList(req, res) {
 async function handleGetEventById(req, res) {
   try {
     const eventId = req.params.id;
-    const event = await Event.findById(eventId);
+    const event = await Event.findById(eventId).populate('guests');
 
     if (!event) {
       return res.status(404).json({ error: true, message: "Event not found" });
@@ -33,9 +32,6 @@ async function handleGetEventById(req, res) {
 }
 
 async function createEventHandler(req, res) {
-  // Handle the logic for creating an event
-
-  console.log("THE BODY", req.body);
   try {
     const {
       name,

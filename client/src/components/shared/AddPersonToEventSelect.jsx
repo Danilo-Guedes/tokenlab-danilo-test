@@ -1,10 +1,20 @@
-import { useState } from "react";
+import { prepareGuestDataForSelect } from "@/src/utils/functions";
+import { useState, useEffect } from "react";
 import Select from "react-select";
 
+function AddPersonToEventSelect({ guests, onChange, initialValue }) {
+  const [selectedOption, setSelectedOption] = useState(initialValue);
 
+  // useEffect(() => {
+  //   console.log(guests);
+  // }, [guests]);
 
-function AddPersonToEventSelect({options}) {
-  const [selectedOption, setSelectedOption] = useState(null);
+  useEffect(() => {
+    // console.log({selectedOption});
+    if (!selectedOption) return;
+    onChange('guests',selectedOption);
+  }, [selectedOption, onChange]);
+
   return (
     <div className="flex flex-col  w-full  gap-5">
       <label
@@ -16,7 +26,7 @@ function AddPersonToEventSelect({options}) {
       <Select
         defaultValue={selectedOption}
         onChange={setSelectedOption}
-        options={options}
+        options={prepareGuestDataForSelect(guests)}
         isMulti
       />
     </div>

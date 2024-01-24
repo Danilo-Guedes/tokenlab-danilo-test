@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 
-async function createUserJWT(user) {
+async function createUserApiJWT(user) {
   const { id, name, email } = user;
 
   const payload = {
@@ -36,4 +36,4 @@ async function decodeJWT(token) {
   }
 }
 
-module.exports = { createUserJWT, decodeJWT };
+module.exports = { createUserApiJWT, decodeJWT };

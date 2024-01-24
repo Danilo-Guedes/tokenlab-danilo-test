@@ -8,7 +8,6 @@ const UserProvider = ({ children }) => {
   const [user, setUser] = useState();
 
   function setUserFn(user) {
-    console.log("setUserFn: ", user);
     setUser(user);
   }
 

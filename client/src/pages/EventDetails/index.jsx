@@ -4,6 +4,7 @@ import PageTemplate from "@/src/components/shared/PageTemplate";
 import EditEventForm from "./components/EditEventForm";
 import { getEventByIdApi } from "@/src/api/event";
 import { useParams } from "react-router";
+import { getUsersApi } from "@/src/api/user";
 
 function EventDetails() {
 
@@ -21,7 +22,15 @@ function EventDetails() {
     },
   });
 
-  if (isFetching) return <div>Carregando...</div>;
+  const { data: guests, isLoading } = useQuery({
+    queryKey: ["users"],
+    queryFn: getUsersApi,
+  });
+
+
+
+
+  if (isFetching || isLoading) return <div>Carregando...</div>;
 
   return (
     <PageTemplate>
@@ -30,7 +39,7 @@ function EventDetails() {
           <img src="/src/svg/calendar.svg" alt="calendar-art" width={200} />
         </div>
         DETAKLHES
-        <EditEventForm event={data?.data} />
+        <EditEventForm event={data?.data} guests={guests} />
       </div>
     </PageTemplate>
   );

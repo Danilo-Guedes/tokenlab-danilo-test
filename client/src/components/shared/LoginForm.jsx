@@ -36,9 +36,6 @@ function LoginForm() {
   const { mutate, isPending } = useMutation({
     mutationFn: userLogin,
     onSuccess: (data) => {
-      console.log("data: ", data);
-      // On success, you can do anything with the returned data
-      console.log("User loged in successfully");
 
       localStorage.setItem("user-token", data.token);
       localStorage.setItem("user-data", JSON.stringify(data.user));

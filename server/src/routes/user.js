@@ -1,9 +1,10 @@
 const express = require("express");
-const { handleCreateUser } = require("../controllers/user");
+const { handlecreateUser, handleGetUsers } = require("../controllers/user");
+const authMiddleware = require("../middlewares/auth")
 const router = express.Router();
 
 
-router.post("/create", (req, res) => {
+router.post("/create", (req, res) => {  // MUDAR PARA EXPRESS-VALIDATOR
   const { name, email, password, confirmPassword } = req.body;
 
   if (!name || !email || !password || !confirmPassword) {
@@ -12,12 +13,14 @@ router.post("/create", (req, res) => {
       .json({ error: true, message: "Missing required fields" });
   }
 
-  handleCreateUser(req, res);
+  handlecreateUser(req, res);
 
 });
 
 router.get("/me",  (req, res) => {
   res.send("Hello World!");
 });
+
+router.get("/", authMiddleware, handleGetUsers)
 
 module.exports = router;

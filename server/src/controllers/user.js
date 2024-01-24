@@ -1,8 +1,6 @@
+const User = require("../models/user");
 
-const User  = require("../models/user");
-
-async function handleCreateUser(req, res) {
-
+async function handlecreateUser(req, res) {
   const { name, email, password, confirmPassword } = req.body;
 
   if (password !== confirmPassword) {
@@ -12,18 +10,15 @@ async function handleCreateUser(req, res) {
   }
 
   try {
-
-    const existingUser = await User.findOne({email: req.body.email})
+    const existingUser = await User.findOne({ email: req.body.email });
     if (existingUser) {
-      return res
-        .status(400)
-        .json({
-          error: true,
-          message: "The Email provided already has a user associated",
-        });
+      return res.status(400).json({
+        error: true,
+        message: "The Email provided already has a user associated",
+      });
     }
 
-   const newUser = {
+    const newUser = {
       name,
       email,
       password,
@@ -36,32 +31,31 @@ async function handleCreateUser(req, res) {
       res.status(400).json({ error: true, message: "User Not Created" });
     }
 
-
     delete user.password;
     delete user.confirmPassword;
 
     console.log("user created", JSON.stringify(user));
 
-
-
-
     res.status(201).json(user);
-
-
   } catch (error) {
     console.error(error);
   }
 }
 
-async function handleGetUser(req, res) {
-  const user = null; //implement
+async function handleGetUsers(req, res) {
+  try {
+    const { id } = req.body.user;
 
+    let users = await User.find({ _id: { $ne: id } });
 
-  if (!user) {
-    res.status(400).json({ error: true, message: "User Not Found" });
-  } else {
-    res.status(200).json(user);
+    if (!users) {
+      return res.status(400).json({ error: true, message: "User Not Found" });
+    }
+
+    res.status(200).json(users);
+  } catch (error) {
+    console.log(error);
   }
 }
 
-module.exports = { handleCreateUser, handleGetUser };
+module.exports = { handlecreateUser, handleGetUsers };

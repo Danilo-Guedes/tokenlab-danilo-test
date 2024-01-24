@@ -18,12 +18,9 @@ import { editEventApi } from "@/src/api/event";
 import { useToast } from "@/src/components/ui/use-toast";
 import { useNavigate } from "react-router";
 import { ROUTES } from "@/src/utils/routes";
+import { prepareGuestDataForSelect } from "@/src/utils/functions";
 
-const options = [
-  { value: "chocolate", label: "Chocolate" },
-  { value: "strawberry", label: "Strawberry" },
-  { value: "vanilla", label: "Vanilla" },
-];
+
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("Nome do evento é obrigatório"),
@@ -35,9 +32,13 @@ const validationSchema = Yup.object().shape({
       Yup.ref("startDateAndHour"),
       "Data de término deve ser maior que a data de início"
     ),
+    guests: Yup.array().of(Yup.object({
+      value: Yup.string().required(),
+      label: Yup.string().required(),
+    })).optional().default([]),
 });
 
-function EditEventForm({ event }) {
+function EditEventForm({ event, guests }) {
   const [startDateAndHour, setStartDateAndHour] = useState(
     new Date(event?.startDateAndHour) || ""
   );
@@ -47,6 +48,8 @@ function EditEventForm({ event }) {
   const { toast } = useToast();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  const [addPersonKey, setAddPersonKey] = useState(0);
 
   const [initialMinTime, setInitialMinTime] = useState(
     setMinutes(new Date(), 0),
@@ -69,7 +72,6 @@ function EditEventForm({ event }) {
       console.log(error);
     },
     onSuccess: ({ data }) => {
-      console.log({ data });
       toast({
         title: "Sucesso",
         description: `"${data.name}" editado com sucesso`,
@@ -85,9 +87,11 @@ function EditEventForm({ event }) {
       description: event.description,
       startDateAndHour: event.startDateAndHour,
       endDateAndHour: event.endDateAndHour,
+      guests: prepareGuestDataForSelect(event.guests)
     },
     validationSchema,
     onSubmit: (values) => {
+      values.guests = values.guests.map((guest) => guest.value);
       mutate({ id: event._id, data: values });
     },
   });
@@ -225,7 +229,7 @@ function EditEventForm({ event }) {
           ) : null}
         </div>
       </div>
-      <AddPersonToEventSelect options={options} />
+      <AddPersonToEventSelect key={addPersonKey} guests={guests} initialValue={formik.values.guests} onChange={formik.setFieldValue}/>
 
       {formik.dirty && (
         <div className="flex flex-col items-center justify-center w-full gap-5 lg:flex-row">
@@ -236,6 +240,7 @@ function EditEventForm({ event }) {
               setStartDateAndHour(new Date(event.startDateAndHour));
               setEndDateAndHour(new Date(event.endDateAndHour));
               formik.resetForm();
+              setAddPersonKey((prev) => prev + 1);
             }}
           >
             Cancelar
@@ -246,6 +251,7 @@ function EditEventForm({ event }) {
         </div>
       )}
       {/* <pre>
+        {JSON.stringify(event, null, 2)}
         {JSON.stringify(formik.values, null, 2)}
         {JSON.stringify(formik.errors, null, 2)}
       </pre> */}

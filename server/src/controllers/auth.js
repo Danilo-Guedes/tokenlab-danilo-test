@@ -1,6 +1,6 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
-const { createUserJWT } = require("../services/auth/jwt");
+const { createUserApiJWT } = require("../services/auth/jwt");
 
 async function handleUserLogin(req, res) {
   const { email, password } = req.body;
@@ -12,9 +12,9 @@ async function handleUserLogin(req, res) {
   }
 
   try {
-    const row = await User.findOne({email: req.body.email})
+    const row = await User.findOne({email: req.body.email}).select("+password");
 
-    console.log({row});
+    // console.log({row});
 
     if (!row) {
       return res.status(400).json({ error: true, message: "User not found" });
@@ -34,7 +34,7 @@ async function handleUserLogin(req, res) {
       email: row.email,
     };
 
-    const token = await createUserJWT(userData);
+    const token = await createUserApiJWT(userData);
 
     return res.json({
       error: false,
