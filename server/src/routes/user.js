@@ -1,5 +1,5 @@
 const express = require("express");
-const { handlecreateUser, handleGetUsers } = require("../controllers/user");
+const { handlecreateUser, handleGetUsers, handleGetUserProfile } = require("../controllers/user");
 const authMiddleware = require("../middlewares/auth")
 const router = express.Router();
 
@@ -17,9 +17,7 @@ router.post("/create", (req, res) => {  // MUDAR PARA EXPRESS-VALIDATOR
 
 });
 
-router.get("/me",  (req, res) => {
-  res.send("Hello World!");
-});
+router.get("/me", authMiddleware, handleGetUserProfile)
 
 router.get("/", authMiddleware, handleGetUsers)
 

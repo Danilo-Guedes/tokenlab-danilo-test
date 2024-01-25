@@ -11,7 +11,7 @@ import {
   AlertDialogTrigger,
 } from "@/src/components/ui/alert-dialog";
 import { Button } from "../ui/button";
-import { useToast } from "../ui/use-toast";
+import { useToast } from "../../hooks/use-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteEventApi } from "@/src/api/event";
 

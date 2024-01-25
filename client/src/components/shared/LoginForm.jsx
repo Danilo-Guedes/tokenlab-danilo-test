@@ -5,7 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 
 import { ROUTES } from "../../utils/routes";
 import { userLogin } from "../../api/auth";
-import { useToast } from "../../components/ui/use-toast";
+import { useToast } from "../../hooks/use-toast";
 import Spinner from "./Spinner";
 import { cn } from "../../utils/style";
 import { Button } from "../ui/button";

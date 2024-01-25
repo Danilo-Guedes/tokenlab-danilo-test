@@ -53,7 +53,7 @@ const Button = React.forwardRef(
     const Comp = asChild ? Slot : "button";
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+        className={cn(buttonVariants({ variant, size, className }), isLoading && "cursor-not-allowed opacity-60")}
         ref={ref}
         {...props}
         disabled={isLoading || disabled}

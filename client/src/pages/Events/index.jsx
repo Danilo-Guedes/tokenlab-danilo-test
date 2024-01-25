@@ -7,6 +7,7 @@ import { getEventsApi } from "@/src/api/event";
 import { cn } from "../../utils/style";
 import { ROUTES } from "../../utils/routes";
 import { useQuery } from "@tanstack/react-query";
+import CalendarSvg from "@/src/components/shared/CalendarSvg";
 
 function Events() {
   const { data,  isLoading } = useQuery({
@@ -50,7 +51,7 @@ function Events() {
           </Link>
         </div>
         <div className="flex flex-col items-center justify-centert">
-          <img src="/src/svg/calendar.svg" alt="calendar-art" width={200} />
+          <CalendarSvg />
         </div>
 
         <div className="flex flex-col items-center w-full">

@@ -8,7 +8,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { cn } from "../../utils/style";
 import Spinner from "./Spinner";
-import { useToast } from "../ui/use-toast";
+import { useToast } from "../../hooks/use-toast";
 import { Button } from "../ui/button";
 
 const validationSchema = Yup.object({

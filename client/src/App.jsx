@@ -10,6 +10,7 @@ import Events from "./pages/Events";
 import NewEvent from "./pages/NewEvent";
 import { GlobalProvider } from "./context/index";
 import EventDetails from "./pages/EventDetails";
+import Profile from "./pages/Profile";
 
 function App() {
   const router = createBrowserRouter([
@@ -35,7 +36,12 @@ function App() {
       path: ROUTES.eventDetails(),
       element: <EventDetails />,
       loader: () => checkAuth(),
-    }
+    },
+    {
+      path: ROUTES.me,
+      element: <Profile />,
+      loader: () => checkAuth(),
+    },
   ]);
 
   const queryClient = new QueryClient();

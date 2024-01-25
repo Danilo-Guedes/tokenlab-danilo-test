@@ -5,6 +5,7 @@ import EditEventForm from "./components/EditEventForm";
 import { getEventByIdApi } from "@/src/api/event";
 import { useParams } from "react-router";
 import { getUsersApi } from "@/src/api/user";
+import CalendarSvg from "@/src/components/shared/CalendarSvg";
 
 function EventDetails() {
 
@@ -36,9 +37,8 @@ function EventDetails() {
     <PageTemplate>
       <div className="flex flex-col items-center justify-center w-full px-3 xl:px-44">
         <div className="my-10">
-          <img src="/src/svg/calendar.svg" alt="calendar-art" width={200} />
+          <CalendarSvg />
         </div>
-        DETAKLHES
         <EditEventForm event={data?.data} guests={guests} />
       </div>
     </PageTemplate>

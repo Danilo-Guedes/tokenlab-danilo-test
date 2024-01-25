@@ -9,7 +9,7 @@ export async function createUserApi(user) {
     throw error;
   }
 }
-export async function getUserProfile() {
+export async function getUserProfileApi() {
   try {
     const resp = await apiClient.get("/users/me", );
     return resp.data;

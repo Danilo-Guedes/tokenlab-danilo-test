@@ -58,4 +58,16 @@ async function handleGetUsers(req, res) {
   }
 }
 
-module.exports = { handlecreateUser, handleGetUsers };
+async function handleGetUserProfile(req, res) {
+  const user = await User.findById(req.body.user.id);
+
+  console.log(user);
+
+  if (!user) {
+    return res.status(400).json({ error: true, message: "User Not Found" });
+  }
+
+  return res.status(200).json(user);
+}
+
+module.exports = { handlecreateUser, handleGetUsers, handleGetUserProfile };

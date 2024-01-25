@@ -15,7 +15,7 @@ import AddPersonToEventSelect from "@/src/components/shared/AddPersonToEventSele
 import { Button } from "@/src/components/ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { editEventApi } from "@/src/api/event";
-import { useToast } from "@/src/components/ui/use-toast";
+import { useToast } from "@/src/hooks/use-toast";
 import { useNavigate } from "react-router";
 import { ROUTES } from "@/src/utils/routes";
 import { prepareGuestDataForSelect } from "@/src/utils/functions";
