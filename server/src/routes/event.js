@@ -57,6 +57,7 @@ router.put(
       .isISO8601()
       .withMessage("End date and hour must be a valid date"),
     validationMiddleware,
+    overlapDateMiddleware,
   ],
   handleEditEvent
 );

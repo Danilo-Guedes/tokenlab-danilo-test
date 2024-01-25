@@ -2,7 +2,7 @@ const Event = require("../models/event");
 
 async function handleEventList(req, res) {
   try {
-    const events = await Event.find({ownerId: req.body.user.id}).populate("guests");
+    const events = await Event.find({ownerId: req.body.user.id}).populate("guests").sort({endDateAndHour: 1});
 
     if (!events) {
       return res

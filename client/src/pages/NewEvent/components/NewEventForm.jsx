@@ -257,10 +257,10 @@ function NewEventForm({guests}) {
       <Button type="submit" className="w-full mt-5">
         Adicionar Evento
       </Button>
-      <pre>
+      {/* <pre>
         {JSON.stringify(formik.values, null, 2)}
         {JSON.stringify(formik.errors, null, 2)}
-      </pre>
+      </pre> */}
     </form>
   );
 }

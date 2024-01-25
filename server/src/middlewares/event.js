@@ -14,7 +14,7 @@ const overlapDateMiddleware = async (req, res, next) => {
   );
   const incomingEvent = req.body;
 
-  //   console.log({LENGTH: eventList?.length, eventList, incomingEvent});
+    console.log({LENGTH: eventList?.length, eventList, incomingEvent});
 
   const isOverlap = eventList.some((event) => {
     const eventStartDate = new Date(event.startDateAndHour);
@@ -34,11 +34,11 @@ const overlapDateMiddleware = async (req, res, next) => {
       isBefore(incomingStartDate, eventStartDate) &&
       isAfter(incomingEndDate, eventEndDate);
 
-    // console.log({
-    //   checkStartDate,
-    //   checkEndDate,
-    //   checkBothDates,
-    // });
+    console.log({
+      checkStartDate,
+      checkEndDate,
+      checkBothDates,
+    });
 
     return checkStartDate || checkEndDate || checkBothDates;
   });

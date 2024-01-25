@@ -61,7 +61,6 @@ async function handleGetUsers(req, res) {
 async function handleGetUserProfile(req, res) {
   const user = await User.findById(req.body.user.id);
 
-  console.log(user);
 
   if (!user) {
     return res.status(400).json({ error: true, message: "User Not Found" });

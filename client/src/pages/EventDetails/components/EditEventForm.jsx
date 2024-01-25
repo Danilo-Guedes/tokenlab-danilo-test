@@ -20,8 +20,6 @@ import { useNavigate } from "react-router";
 import { ROUTES } from "@/src/utils/routes";
 import { prepareGuestDataForSelect } from "@/src/utils/functions";
 
-
-
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("Nome do evento é obrigatório"),
   description: Yup.string().required("Descrição do evento é obrigatória"),
@@ -32,10 +30,15 @@ const validationSchema = Yup.object().shape({
       Yup.ref("startDateAndHour"),
       "Data de término deve ser maior que a data de início"
     ),
-    guests: Yup.array().of(Yup.object({
-      value: Yup.string().required(),
-      label: Yup.string().required(),
-    })).optional().default([]),
+  guests: Yup.array()
+    .of(
+      Yup.object({
+        value: Yup.string().required(),
+        label: Yup.string().required(),
+      })
+    )
+    .optional()
+    .default([]),
 });
 
 function EditEventForm({ event, guests }) {
@@ -70,6 +73,23 @@ function EditEventForm({ event, guests }) {
     mutationFn: editEventApi,
     onError: (error) => {
       console.log(error);
+
+      if (error.response?.data?.error?.includes("overlap")) {
+        toast({
+          title: "Opa",
+          description:
+            "Você já tem um evento nesse horário, verifique seu calendário",
+          variant: "destructive",
+        });
+
+        resetAllForm();
+        return;
+      }
+      toast({
+        title: "Opa",
+        description: "Algo de errado com a edição do evento, tente mais tarde!",
+        variant: "destructive",
+      });
     },
     onSuccess: ({ data }) => {
       toast({
@@ -87,7 +107,7 @@ function EditEventForm({ event, guests }) {
       description: event.description,
       startDateAndHour: event.startDateAndHour,
       endDateAndHour: event.endDateAndHour,
-      guests: prepareGuestDataForSelect(event.guests)
+      guests: prepareGuestDataForSelect(event.guests),
     },
     validationSchema,
     onSubmit: (values) => {
@@ -95,6 +115,13 @@ function EditEventForm({ event, guests }) {
       mutate({ id: event._id, data: values });
     },
   });
+
+  function resetAllForm() {
+    formik.resetForm();
+    setStartDateAndHour(new Date(event.startDateAndHour));
+    setEndDateAndHour(new Date(event.endDateAndHour));
+    setAddPersonKey((prev) => prev + 1);
+  }
 
   useEffect(() => {
     if (startDateAndHour === "") return;
@@ -170,7 +197,7 @@ function EditEventForm({ event, guests }) {
               } else {
                 resetInitialMinTime(date);
               }
-              setEndDateAndHour("")
+              setEndDateAndHour("");
             }}
             showIcon
             icon={<Calendar className="text-primary" />}
@@ -229,7 +256,12 @@ function EditEventForm({ event, guests }) {
           ) : null}
         </div>
       </div>
-      <AddPersonToEventSelect key={addPersonKey} guests={guests} initialValue={formik.values.guests} onChange={formik.setFieldValue}/>
+      <AddPersonToEventSelect
+        key={addPersonKey}
+        guests={guests}
+        initialValue={formik.values.guests}
+        onChange={formik.setFieldValue}
+      />
 
       {formik.dirty && (
         <div className="flex flex-col items-center justify-center w-full gap-5 lg:flex-row">
