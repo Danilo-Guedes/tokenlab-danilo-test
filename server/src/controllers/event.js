@@ -53,7 +53,6 @@ async function createEventHandler(req, res) {
 
     let event = await Event.create(newEvent);
 
-    console.log({ eventobj: event.toObject() });
 
     if (!event) {
       return res

@@ -34,7 +34,7 @@ function EventCard({ event }) {
           {event.name}
         </span>
       </div>
-      <div className="flex flex-col  gap-2">
+      <div className="flex flex-col  gap-8 lg:gap-3 lg:w-64">
         <div className="flex flex-col items-center lg:items-start lg:justify-start text-sm gap-2 ">
           <Calendar size={24} className="text-primary" />
           <span>
@@ -59,7 +59,7 @@ function EventCard({ event }) {
           )}
         </div>
       </div>
-      <div className="flex flex-1 flex-col items-start bg-primary/20 rounded-lg p-1 lg:p-4 ">
+      <div className="my-10 lg:my-0 flex flex-1 flex-col items-start bg-primary/20 rounded-lg p-1 lg:p-4 ">
         <span
           title={event.description}
           className="text-ellipsis line-clamp-3 text-secondary font-bold text-start"

@@ -45,6 +45,8 @@ function NewEventForm({guests}) {
   const navigate = useNavigate();
   const queryClient = useQueryClient()
 
+  const [addPersonKey, setAddPersonKey] = useState(0);
+
   const [initialMinTime, setInitialMinTime] = useState(
     setMinutes(new Date(), 0),
     0
@@ -65,6 +67,25 @@ function NewEventForm({guests}) {
     mutationFn: createEventApi,
     onError: (error) => {
       console.log(error);
+
+      if(error.response?.data?.error?.includes("overlap")) {
+        toast({
+          title: "Opa",
+          description: "Você já tem um evento nesse horário, verifique seu calendário",
+          variant: "destructive"
+        });
+
+        formik.resetForm()
+        setStartDateAndHour("")
+        setEndDateAndHour("")
+        setAddPersonKey((prev) => prev + 1);
+        return;
+      }
+      toast({
+        title: "Opa",
+        description: "Algo de errado com a sua criação",
+        variant: "destructive"
+      });
     },
     onSuccess: ({data}) => {
       toast({
@@ -92,11 +113,12 @@ function NewEventForm({guests}) {
 
       values.guests = values.guests.map((guest) => guest.value);
 
-      console.log({values});
+      // console.log({values});
 
       mutate(values);
     },
   });
+
 
   useEffect(() => {
     if (startDateAndHour === "") return;
@@ -231,13 +253,13 @@ function NewEventForm({guests}) {
           ) : null}
         </div>
       </div>
-      <AddPersonToEventSelect guests={guests} onChange={formik.setFieldValue} />
+      <AddPersonToEventSelect  key={addPersonKey} guests={guests} onChange={formik.setFieldValue} />
       <Button type="submit" className="w-full mt-5">
         Adicionar Evento
       </Button>
       <pre>
-        {/* {JSON.stringify(formik.values, null, 2)}
-        {JSON.stringify(formik.errors, null, 2)} */}
+        {JSON.stringify(formik.values, null, 2)}
+        {JSON.stringify(formik.errors, null, 2)}
       </pre>
     </form>
   );
