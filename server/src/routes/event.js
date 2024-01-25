@@ -9,7 +9,10 @@ const {
 } = require("../controllers/event");
 const validationMiddleware = require("../middlewares/validation");
 const authMiddleware = require("../middlewares/auth");
-const overlapDateMiddleware = require("../middlewares/event");
+const {
+  ownerOverlapDateMiddleware,
+  guestsOverlapDateMiddleware,
+} = require("../middlewares/event");
 
 const router = express.Router();
 
@@ -33,7 +36,9 @@ router.post(
       .withMessage("End date and hour must be a valid date"),
     check("ownerId").isLength({ min: 1 }).withMessage("Owner ID is required"),
     validationMiddleware,
-    overlapDateMiddleware,
+    ownerOverlapDateMiddleware,
+    guestsOverlapDateMiddleware,
+
   ],
   (req, res) => {
     createEventHandler(req, res);
@@ -57,7 +62,8 @@ router.put(
       .isISO8601()
       .withMessage("End date and hour must be a valid date"),
     validationMiddleware,
-    overlapDateMiddleware,
+    ownerOverlapDateMiddleware,
+    guestsOverlapDateMiddleware
   ],
   handleEditEvent
 );

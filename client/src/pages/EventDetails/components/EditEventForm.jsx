@@ -92,10 +92,22 @@ function EditEventForm({ event, guests }) {
       });
     },
     onSuccess: ({ data }) => {
-      toast({
-        title: "Sucesso",
-        description: `"${data.name}" editado com sucesso`,
-      });
+      if (data?.guestToRemove?.length > 0) {
+        toast({
+          title: "Atenção!!",
+          description: `O Evento ${
+            data.name
+          } foi criado, porém o(s) convidado(s) com id ${data?.guestToRemove?.map(
+            (v) => `${v} `
+          )} não fora(m) adicionado(s)`,
+          variant: "warning",
+        });
+      } else {
+        toast({
+          title: "Sucesso",
+          description: `"${data.name}" editado com sucesso`,
+        });
+      }
       queryClient.invalidateQueries({ queryKey: ["events-list"] });
       navigate(ROUTES.events);
     },

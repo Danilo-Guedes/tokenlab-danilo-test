@@ -2,7 +2,9 @@ const Event = require("../models/event");
 
 async function handleEventList(req, res) {
   try {
-    const events = await Event.find({ownerId: req.body.user.id}).populate("guests").sort({endDateAndHour: 1});
+    const events = await Event.find({ ownerId: req.body.user.id })
+      .populate("guests")
+      .sort({ endDateAndHour: 1 });
 
     if (!events) {
       return res
@@ -19,7 +21,7 @@ async function handleEventList(req, res) {
 async function handleGetEventById(req, res) {
   try {
     const eventId = req.params.id;
-    const event = await Event.findById(eventId).populate('guests');
+    const event = await Event.findById(eventId).populate("guests");
 
     if (!event) {
       return res.status(404).json({ error: true, message: "Event not found" });
@@ -53,7 +55,6 @@ async function createEventHandler(req, res) {
 
     let event = await Event.create(newEvent);
 
-
     if (!event) {
       return res
         .status(400)
@@ -62,7 +63,10 @@ async function createEventHandler(req, res) {
 
     res
       .status(201)
-      .json({ message: "event created succesfully", data: event.toObject() });
+      .json({
+        message: "event created succesfully",
+        data: { ...event.toObject(), guestToRemove: req.body?.guestToRemove },
+      });
   } catch (error) {
     console.log(error);
   }
@@ -112,7 +116,12 @@ async function handleEditEvent(req, res) {
       return res.status(404).json({ error: true, message: "Event not found" });
     }
 
-    res.status(200).json({ message: "Event updated", data: event });
+    res
+      .status(200)
+      .json({
+        message: "Event updated",
+        data: { ...event.toObject(), guestToRemove: req.body?.guestToRemove },
+      });
   } catch (error) {
     console.log(error);
   }
@@ -123,5 +132,5 @@ module.exports = {
   handleEventList,
   handleEventDelete,
   handleGetEventById,
-  handleEditEvent
+  handleEditEvent,
 };

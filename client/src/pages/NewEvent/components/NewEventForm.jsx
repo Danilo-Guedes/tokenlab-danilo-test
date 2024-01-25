@@ -20,8 +20,6 @@ import { useToast } from "@/src/hooks/use-toast";
 import { useNavigate } from "react-router";
 import { ROUTES } from "@/src/utils/routes";
 
-
-
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("Nome do evento é obrigatório"),
   description: Yup.string().required("Descrição do evento é obrigatória"),
@@ -32,18 +30,23 @@ const validationSchema = Yup.object().shape({
       Yup.ref("startDateAndHour"),
       "Data de término deve ser maior que a data de início"
     ),
-    guests: Yup.array().of(Yup.object({
-      value: Yup.string().required(),
-      label: Yup.string().required(),
-    })).optional().default([]),
+  guests: Yup.array()
+    .of(
+      Yup.object({
+        value: Yup.string().required(),
+        label: Yup.string().required(),
+      })
+    )
+    .optional()
+    .default([]),
 });
 
-function NewEventForm({guests}) {
+function NewEventForm({ guests }) {
   const [startDateAndHour, setStartDateAndHour] = useState("");
   const [endDateAndHour, setEndDateAndHour] = useState("");
   const { toast } = useToast();
   const navigate = useNavigate();
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   const [addPersonKey, setAddPersonKey] = useState(0);
 
@@ -68,33 +71,41 @@ function NewEventForm({guests}) {
     onError: (error) => {
       console.log(error);
 
-      if(error.response?.data?.error?.includes("overlap")) {
+      if (error.response?.data?.error?.includes("overlap")) {
         toast({
           title: "Opa",
-          description: "Você já tem um evento nesse horário, verifique seu calendário",
-          variant: "destructive"
+          description:
+            "Você já tem um evento nesse horário, verifique seu calendário",
+          variant: "destructive",
         });
 
-        formik.resetForm()
-        setStartDateAndHour("")
-        setEndDateAndHour("")
+        formik.resetForm();
+        setStartDateAndHour("");
+        setEndDateAndHour("");
         setAddPersonKey((prev) => prev + 1);
         return;
       }
       toast({
         title: "Opa",
         description: "Algo de errado com a sua criação",
-        variant: "destructive"
+        variant: "destructive",
       });
     },
-    onSuccess: ({data}) => {
-      toast({
-        title: "Evento criado com sucesso",
-        description: `"${data.name}" criado com sucesso`,
-      });
-      queryClient.invalidateQueries({queryKey: ["events-list"]})
+    onSuccess: ({ data }) => {
+      if (data?.guestToRemove?.length > 0) {
+        toast({
+          title: "Atenção!!",
+          description: `O Evento ${data.name} foi criado, porém o(s) convidado(s) com id ${data?.guestToRemove?.map(v => `${v} ` )} não fora(m) adicionado(s)`,
+          variant: "warning",
+        });
+      } else {
+        toast({
+          title: "Evento criado com sucesso",
+          description: `"${data.name}" criado com sucesso`,
+        });
+      }
+      queryClient.invalidateQueries({ queryKey: ["events-list"] });
       navigate(ROUTES.events);
-      
     },
   });
 
@@ -104,11 +115,10 @@ function NewEventForm({guests}) {
       description: "",
       startDateAndHour: "",
       endDateAndHour: "",
-      guests: []
+      guests: [],
     },
     validationSchema,
     onSubmit: (values) => {
-
       values.ownerId = user?.id;
 
       values.guests = values.guests.map((guest) => guest.value);
@@ -118,7 +128,6 @@ function NewEventForm({guests}) {
       mutate(values);
     },
   });
-
 
   useEffect(() => {
     if (startDateAndHour === "") return;
@@ -194,7 +203,7 @@ function NewEventForm({guests}) {
               } else {
                 resetInitialMinTime(date);
               }
-              setEndDateAndHour("")
+              setEndDateAndHour("");
             }}
             showIcon
             icon={<Calendar className="text-primary" />}
@@ -253,7 +262,11 @@ function NewEventForm({guests}) {
           ) : null}
         </div>
       </div>
-      <AddPersonToEventSelect  key={addPersonKey} guests={guests} onChange={formik.setFieldValue} />
+      <AddPersonToEventSelect
+        key={addPersonKey}
+        guests={guests}
+        onChange={formik.setFieldValue}
+      />
       <Button type="submit" className="w-full mt-5">
         Adicionar Evento
       </Button>
