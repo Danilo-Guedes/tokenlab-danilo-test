@@ -5,12 +5,7 @@ import Select from "react-select";
 function AddPersonToEventSelect({ guests, onChange, initialValue }) {
   const [selectedOption, setSelectedOption] = useState(initialValue);
 
-  // useEffect(() => {
-  //   console.log(guests);
-  // }, [guests]);
-
   useEffect(() => {
-    // console.log({selectedOption});
     if (!selectedOption) return;
     onChange('guests',selectedOption);
   }, [selectedOption, onChange]);
@@ -28,6 +23,8 @@ function AddPersonToEventSelect({ guests, onChange, initialValue }) {
         onChange={setSelectedOption}
         options={prepareGuestDataForSelect(guests)}
         isMulti
+        noOptionsMessage={() => "Nenhum usuário encontrado"}
+        placeholder="Selecione..."
       />
     </div>
   );

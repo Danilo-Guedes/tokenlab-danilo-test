@@ -34,7 +34,6 @@ async function handlecreateUser(req, res) {
     delete user.password;
     delete user.confirmPassword;
 
-    console.log("user created", JSON.stringify(user));
 
     res.status(201).json(user);
   } catch (error) {

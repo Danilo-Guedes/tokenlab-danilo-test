@@ -6,12 +6,9 @@ async function ownerOverlapDateMiddleware(req, res, next) {
 
   const paramId = req.params.id;
 
-  console.log({incomingEvent, paramId});
   const eventList = await Event.find({ ownerId: req.body.user.id })
     .where({ _id: { $ne: paramId } })
     .populate("guests");
-
-  // console.log({LENGTH: eventList?.length, eventList, incomingEvent});
 
   const hasOverLap = hasOverLapDates(incomingEvent, eventList);
 
@@ -25,21 +22,16 @@ async function ownerOverlapDateMiddleware(req, res, next) {
 }
 
 async function guestsOverlapDateMiddleware(req, res, next) {
-  console.log(req.body);
-
-
   const paramId = req.params.id;
   const incomingGuestList = req.body.guests;
 
   const incomingEvent = req.body;
 
   const getGuestEventsPromises = incomingGuestList.map((guestId) => {
-    console.log({ guestId });
-
     return new Promise(async (resolve, reject) => {
-      const events = await Event.find({ ownerId: guestId }).where({_id: {$ne: paramId}});
-
-      console.log({ events });
+      const events = await Event.find({ ownerId: guestId }).where({
+        _id: { $ne: paramId },
+      });
 
       if (!events) {
         return resolve({ guestId, events: [] });
@@ -52,38 +44,22 @@ async function guestsOverlapDateMiddleware(req, res, next) {
 
   await Promise.all(getGuestEventsPromises)
     .then((guestEvents) => {
-      console.log({ guestEvents: JSON.stringify(guestEvents) });
-
       guestsEventList = guestEvents;
     })
     .catch((error) => {
       console.log(error);
     });
 
-  // console.log({
-  //   guestsEventList: JSON.stringify(guestsEventList),
-  //   typeof: typeof guestsEventList,
-  // });
-
   const checkForAllGuestsOverlapDates = guestsEventList?.map((guestEvent) => {
     const hasOverLap = hasOverLapDates(incomingEvent, guestEvent.events);
-
-    console.log({ nomap: guestEvent });
 
     return { guestId: guestEvent?.guestId, hasOverLap };
   });
 
-  console.log({
-    checkForAllGuestsOverlapDates: JSON.stringify(
-      checkForAllGuestsOverlapDates
-    ),
-  });
 
   const guestsWithOverlaps = checkForAllGuestsOverlapDates?.filter(
     (guest) => guest.hasOverLap
   );
-
-  console.log({ guestsWithOverlaps });
 
   let guestToRemove;
 

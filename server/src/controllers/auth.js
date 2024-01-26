@@ -14,7 +14,6 @@ async function handleUserLogin(req, res) {
   try {
     const row = await User.findOne({email: req.body.email}).select("+password");
 
-    // console.log({row});
 
     if (!row) {
       return res.status(400).json({ error: true, message: "User not found" });
@@ -22,11 +21,13 @@ async function handleUserLogin(req, res) {
 
     // const isPasswordValid = await bcrypt.compare(password, row.hashed_password);
 
-    // if (!isPasswordValid) {
-    //   return res
-    //     .status(400)
-    //     .json({ error: true, message: "Invalid credentials" });
-    // }
+    const isPasswordValid = password === row.password;
+
+    if (!isPasswordValid) {
+      return res
+        .status(400)
+        .json({ error: true, message: "Invalid credentials" });
+    }
 
     const userData = {
       id: row._id, 

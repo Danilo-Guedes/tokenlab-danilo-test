@@ -13,13 +13,6 @@ function Events() {
   const { data,  isLoading } = useQuery({
     queryFn: getEventsApi,
     queryKey: ["events-list"],
-    onError: (error) => {
-      console.log(error);
-    },
-    onSuccess: (data) => {
-      alert("aqui deu bom");
-      console.log(data);
-    },
   });
 
   const events = data?.data;

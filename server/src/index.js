@@ -1,7 +1,10 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-
 const mongoose = require("mongoose");
+
+const PORT = process.env.PORT || 3000;
+
 
 const userRouter = require("./routes/user");
 const authRouter = require("./routes/auth");
@@ -19,12 +22,16 @@ app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/events", eventRouter);
 
-app.listen(3000, async () => {
-  await mongoose.connect("mongodb://localhost:27017/tokenlab");
-  console.log("mongoose connected");
-  console.log("Server is running on port 3000");
-});
+mongoose
+  .connect(process.env.MONGO_DB_URI)
+  .then(() => {
+    console.log("Database connected");
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${process.env.PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error('Error connecting to database:', error);
+    process.exit(1);
+  });
 
-app.get("/api/hello", (req, res) => {
-  return res.send("Hello World!");
-});

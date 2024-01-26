@@ -26,12 +26,6 @@ function hasOverLapDates(incomingEvent, eventList) {
       isBefore(incomingStartDate, eventStartDate) &&
       isAfter(incomingEndDate, eventEndDate);
 
-    // console.log({
-    //   checkStartDate,
-    //   checkEndDate,
-    //   checkBothDates,
-    // });
-
     return checkStartDate || checkEndDate || checkBothDates;
   });
   return isOverlap;

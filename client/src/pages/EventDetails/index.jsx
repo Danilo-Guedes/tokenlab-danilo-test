@@ -14,13 +14,6 @@ function EventDetails() {
   const { data, isFetching } = useQuery({
     queryKey: ["eventDetails"],
     queryFn: getEventByIdApi.bind(null, param.id),
-    onError: (error) => {
-      console.log(error);
-    },
-    onSuccess: ({ event }) => {
-      alert("aqui deu bom");
-      console.log({ event });
-    },
   });
 
   const { data: guests, isLoading } = useQuery({

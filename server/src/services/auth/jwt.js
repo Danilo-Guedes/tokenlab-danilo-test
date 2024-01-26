@@ -12,10 +12,8 @@ async function createUserApiJWT(user) {
 
   const token = jwt.sign(payload, process.env.JWT_SECRET || 'AnRandomSaltText', {
     expiresIn: "7d",
-    // expiresIn: "5000",
   });
 
-  console.log({token});
 
   return token;
 }

@@ -123,8 +123,6 @@ function NewEventForm({ guests }) {
 
       values.guests = values.guests.map((guest) => guest.value);
 
-      // console.log({values});
-
       mutate(values);
     },
   });
