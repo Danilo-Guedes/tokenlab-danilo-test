@@ -77,12 +77,12 @@ cd server/ && npm install && npm run dev
 <img src="screenshots/datepicker-validation.png" alt="DatePicker Validations"  width="100%" >
 <img src="screenshots/event-exclude-modal.png" alt="Event Exclude Modal"  width="100%" >
 <img src="screenshots/event-list-desktop.png" alt="Event List Desktop Screenshot"  width="100%" >
-<img src="screenshots/user-overlap-toast.png" alt="User Overlap Toast" width="45%">
-<img src="screenshots/guest-overlap-toast.png" alt="Guest Overlap Toast" width="45%">
-<img src="screenshots/event-list-mobile.png" alt="Event List Mobile Screenshot" width="45%">
-<img src="screenshots/event-edition-mobile.png" alt="Event Edition on Mobile" width="45%">
-<img src="screenshots/home-mobile.png" alt="Home Mobile Screenshot" width="45%">
-<img src="screenshots/user-profile-mobile.png" alt="user Profile Mobile Screenshot" width="45%">
+<img src="screenshots/user-overlap-toast.png" alt="User Overlap Toast" width="40%">
+<img src="screenshots/guest-overlap-toast.png" alt="Guest Overlap Toast" width="40%">
+<img src="screenshots/event-list-mobile.png" alt="Event List Mobile Screenshot" width="40%">
+<img src="screenshots/event-edition-mobile.png" alt="Event Edition on Mobile" width="40%">
+<img src="screenshots/home-mobile.png" alt="Home Mobile Screenshot" width="40%">
+<img src="screenshots/user-profile-mobile.png" alt="user Profile Mobile Screenshot" width="40%">
 
 
 ## License
