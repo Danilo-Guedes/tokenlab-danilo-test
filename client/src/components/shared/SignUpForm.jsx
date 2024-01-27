@@ -151,7 +151,7 @@ function SignUpForm() {
                 isPending && "cursor-not-allowed opacity-60"
               )}
             >
-              {isPending ? <Spinner /> : "Entrar"}
+              {isPending ? <Spinner /> : "Cadastrar"}
             </Button>
           </div>
           <div className="mt-5">
