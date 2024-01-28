@@ -1,5 +1,5 @@
 # Use an official MongoDB runtime as a parent image
-FROM mongo:latest
+FROM mongo:7.0.5
 
 # Make a directory in Docker container
 RUN mkdir -p /data/db
