@@ -25,9 +25,7 @@ The back-end of this application is developed using:
 
 ## Getting Started
 
-> :warning: **WARNING 1**: This monorepo requires Node.js v18+. Please ensure you have this version installed before proceeding.
-
-> :warning: **WARNING 2**: This monorepo requires an instance of a Mongodb database running in your machine, cloud or in a container. Please make sure you have the procces running and add a .env file with a MONGO_DB_URI=here-goes-your-mongodb-string-uri. (with more time I will put this DB in a container image to avoid this step)
+> :warning: **WARNING **: This monorepo requires Docker and Docker Compose  installed before proceeding.
 
 To get started with this project, follow the steps below:
 
@@ -43,21 +41,13 @@ git clone https://github.com/Danilo-Guedes/tokenlab-danilo-test.git
 cd tokenlab-danilo-test
 ```
 
-3. cd into /client folder, install the dependencies and start the application.
+3. run the docker compose to initiate the application.
 
 ```bash
-cd client/ && npm install && npm run dev
+docker-compose up --build
 ```
 
-4. Open a new terminal, cd into /server folder, install de depenencies and start de application.
-
-```bash
-cd server/ && npm install && npm run dev
-```
-
-5. Open the browser at http://localhost:5173/ (default port for vite apps).
-
-6. Start use the application.
+4. Open the browser at http://localhost:5173/ (default port for vite apps) and use the application.
 
 ## What I would do if I had more time ?
 
@@ -66,8 +56,7 @@ cd server/ && npm install && npm run dev
 3. Write tests for the application.
 4. Create a class to standardize backend errors.
 5. If it were a real project, I would be using TypeScript instead of vanilla JavaScript.
-6. I would put all the code into a container so the development enviroment gets easier to setup.
-7. Add better loading states (skeletons and spinners) and of course add small animation to make the UI and UX even more friendly.
+6. Add better loading states (skeletons and spinners) and of course add small animation to make the UI and UX even more friendly.
 
 ## Screenshots
 
@@ -83,7 +72,6 @@ cd server/ && npm install && npm run dev
 <img src="screenshots/event-edition-mobile.png" alt="Event Edition on Mobile" width="40%">
 <img src="screenshots/home-mobile.png" alt="Home Mobile Screenshot" width="40%">
 <img src="screenshots/user-profile-mobile.png" alt="user Profile Mobile Screenshot" width="40%">
-
 
 ## License
 
